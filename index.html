@@ -2,9 +2,10 @@
 <html>
 <head>
     <title>percolation simulation</title>
-
+<meta charset="UTF-8"> 
 <script type="text/javascript">
 function runPercolation( length, width ){
+    var ret = "";
     var done = false;
     var map = [];
     var perc_map = [];
@@ -65,16 +66,19 @@ function runPercolation( length, width ){
     }while( minx < (length-1) ); 
     var n = 0;
     do{
-        document.write( map[n] + "<br />");
+        ret += map[n] + "<br />";
         n++;
         done = (n==length);
     }while(!done);
+
+    return ret;
 }
 </script>
 </head>
 <body>
+<div id="output"></div>
 <script type="text/javascript">
-    runPercolation( 60, 60 );
+    document.getElementById("output").innerHTML = runPercolation( 60, 60 );
 </script>
 </body>
 </html>
