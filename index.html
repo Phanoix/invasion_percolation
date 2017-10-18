@@ -1,0 +1,87 @@
+<html>
+<head>
+</head>
+<script>
+var length = 60;
+var width = 60;
+
+var done = false;
+var map = [];
+var perc_map = [];
+
+// generate random map to percollate through
+for (var i = length - 1; i >= 0; i--) {
+	var tmp = [];
+	var tmp_map = [];
+	for (var j = width - 1; j >= 0; j--) {
+		tmp[j] = Math.random();
+		tmp_map[j] = 8;
+	}
+	perc_map[i] = tmp;
+	map[i] = tmp_map;
+}
+
+
+// simulate percollation
+var water = [];
+var nw = 0;                               // number of cells filled with water
+do{
+    minr = perc_map[0][30];
+    minx = 0; miny = 30;
+
+    // first check x=0 sites
+    for ( var y = 0; y < width; y++ )
+        if ( perc_map[0][y] < minr ){        // check for lower resistance
+            minr = perc_map[0][y];
+            miny = y;
+            // x is already/still 0
+        }
+
+    // now check all 4 neighbours of all water-filled sites
+    for ( var i = 0; i < nw; i++ ){
+        var x = water[i][0];
+        var y = water[i][1];
+        if ( perc_map[x+1][y] < minr ){                  // check for lower resistance
+            minr = perc_map[x+1][y];
+            miny = y;
+            minx = x+1;
+        }
+
+        if ( x > 0 && perc_map[x-1][y] < minr ){        // check for lower resistance
+            minr = perc_map[x-1][y];
+            miny = y;
+            minx = x-1;
+        }
+
+        if ( perc_map[x][y+1] < minr && y < width ){                   // check for lower resistance
+            minr = perc_map[x][y+1];
+            miny = y+1;
+            minx = x;
+        }
+
+        if ( y > 0 && perc_map[x+1][y] < minr ){                 // check for lower resistance
+            minr = perc_map[x][y-1];
+            miny = y-1;
+            minx = x;
+        }
+    }
+
+    // now we should have the minimum resistance neighbour and its coordinates... fill it with water
+    perc_map[minx][miny] = 10.0;         // well above possible resistance for non-water cells
+    water[nw] = [ minx, miny ];
+    map[minx][miny] = '_';
+    nw++;
+
+}while( minx < (length-1) ); 
+
+var n = 0;
+do{
+	document.write( map[n] + "<br />");
+	n++;
+	done = (n==length);
+}while(!done);
+	
+</script>
+<body>
+</body>
+</html>
